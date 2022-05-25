@@ -1,0 +1,47 @@
+[2022-05-25 03:29:00 benchmark.py:27] INFO     datapath: /datasets/DAVIS2017
+[2022-05-25 03:29:00 benchmark.py:27] INFO     ref: 0
+[2022-05-25 03:29:00 benchmark.py:27] INFO     resume: MAST_checkpoint.pt
+[2022-05-25 03:29:00 benchmark.py:27] INFO     savepath: ./results_cpu
+[2022-05-25 03:29:00 benchmark.py:27] INFO     training: False
+[2022-05-25 03:29:00 benchmark.py:37] INFO     Number of model parameters: 5291648
+[2022-05-25 03:29:00 benchmark.py:41] INFO     => loading checkpoint 'MAST_checkpoint.pt'
+[2022-05-25 03:29:02 benchmark.py:44] INFO     => loaded checkpoint 'MAST_checkpoint.pt'
+[2022-05-25 03:29:02 benchmark.py:69] INFO     Start testing.
+[2022-05-25 03:29:41 benchmark.py:27] INFO     datapath: /datasets/DAVIS2017
+[2022-05-25 03:29:41 benchmark.py:27] INFO     ref: 0
+[2022-05-25 03:29:41 benchmark.py:27] INFO     resume: MAST_checkpoint.pt
+[2022-05-25 03:29:41 benchmark.py:27] INFO     savepath: ./results_cpu
+[2022-05-25 03:29:41 benchmark.py:27] INFO     training: False
+[2022-05-25 03:29:41 benchmark.py:37] INFO     Number of model parameters: 5291648
+[2022-05-25 03:29:41 benchmark.py:41] INFO     => loading checkpoint 'MAST_checkpoint.pt'
+[2022-05-25 03:29:43 benchmark.py:44] INFO     => loaded checkpoint 'MAST_checkpoint.pt'
+[2022-05-25 03:29:43 benchmark.py:68] INFO     Start testing.
+[2022-05-25 03:54:30 benchmark.py:146] INFO     [0/30] Js: (0.620). Fs: (0.700).
+[2022-05-25 04:09:22 benchmark.py:146] INFO     [1/30] Js: (0.699). Fs: (0.769).
+[2022-05-25 04:36:25 benchmark.py:146] INFO     [2/30] Js: (0.553). Fs: (0.698).
+[2022-05-25 05:03:56 benchmark.py:146] INFO     [3/30] Js: (0.555). Fs: (0.673).
+[2022-05-25 05:33:36 benchmark.py:146] INFO     [4/30] Js: (0.571). Fs: (0.694).
+[2022-05-25 05:58:03 benchmark.py:146] INFO     [5/30] Js: (0.596). Fs: (0.694).
+[2022-05-25 06:09:11 benchmark.py:146] INFO     [6/30] Js: (0.610). Fs: (0.700).
+[2022-05-25 06:44:28 benchmark.py:146] INFO     [7/30] Js: (0.649). Fs: (0.721).
+[2022-05-25 07:14:10 benchmark.py:146] INFO     [8/30] Js: (0.633). Fs: (0.705).
+[2022-05-25 07:32:48 benchmark.py:146] INFO     [9/30] Js: (0.643). Fs: (0.711).
+[2022-05-25 07:53:43 benchmark.py:146] INFO     [10/30] Js: (0.644). Fs: (0.710).
+[2022-05-25 08:09:02 benchmark.py:146] INFO     [11/30] Js: (0.645). Fs: (0.709).
+[2022-05-25 08:23:50 benchmark.py:146] INFO     [12/30] Js: (0.637). Fs: (0.697).
+[2022-05-25 08:54:14 benchmark.py:146] INFO     [13/30] Js: (0.648). Fs: (0.702).
+[2022-05-25 09:20:18 benchmark.py:146] INFO     [14/30] Js: (0.678). Fs: (0.723).
+[2022-05-25 09:35:19 benchmark.py:146] INFO     [15/30] Js: (0.683). Fs: (0.733).
+[2022-05-25 10:02:23 benchmark.py:146] INFO     [16/30] Js: (0.672). Fs: (0.714).
+[2022-05-25 10:11:17 benchmark.py:146] INFO     [17/30] Js: (0.675). Fs: (0.717).
+[2022-05-25 10:26:09 benchmark.py:146] INFO     [18/30] Js: (0.658). Fs: (0.704).
+[2022-05-25 10:40:14 benchmark.py:146] INFO     [19/30] Js: (0.647). Fs: (0.684).
+[2022-05-25 10:54:58 benchmark.py:146] INFO     [20/30] Js: (0.650). Fs: (0.689).
+[2022-05-25 11:10:13 benchmark.py:146] INFO     [21/30] Js: (0.651). Fs: (0.689).
+[2022-05-25 11:35:58 benchmark.py:146] INFO     [22/30] Js: (0.643). Fs: (0.688).
+[2022-05-25 11:47:17 benchmark.py:146] INFO     [23/30] Js: (0.637). Fs: (0.682).
+[2022-05-25 12:13:40 benchmark.py:146] INFO     [24/30] Js: (0.625). Fs: (0.675).
+[2022-05-25 12:47:52 benchmark.py:146] INFO     [25/30] Js: (0.625). Fs: (0.675).
+[2022-05-25 13:14:40 benchmark.py:146] INFO     [26/30] Js: (0.636). Fs: (0.684).
+[2022-05-25 13:27:13 benchmark.py:146] INFO     [27/30] Js: (0.636). Fs: (0.683).
+[2022-05-25 13:43:07 benchmark.py:146] INFO     [28/30] Js: (0.634). Fs: (0.679).
