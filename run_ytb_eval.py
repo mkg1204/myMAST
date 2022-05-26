@@ -122,7 +122,6 @@ def test(dataloader, model, log):
                 out_img = np.pad(out_img, pad, 'edge').astype(np.uint8)
                 imwrite_indexed(output_file, out_img, resize_size=seq_info["seq_size"])
 
-            print(seq_info['seq_imgs'][i+1])
             output_file = os.path.join(output_folder, seq_info['seq_imgs'][i+1][0].replace('.jpg', '.png'))
             out_img = output[0, 0].cpu().numpy().astype(np.uint8)
             out_img = np.pad(out_img, pad, 'edge').astype(np.uint8)
