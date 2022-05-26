@@ -14,12 +14,14 @@ def imread_indexed(filename):
   annotation = np.atleast_3d(im)[...,0]
   return annotation,np.array(im.getpalette()).reshape((-1,3))
 
-def imwrite_indexed(filename,array,color_palette=default_palette):
+def imwrite_indexed(filename,array,color_palette=default_palette, resize_size=None):
   """ Save indexed png."""
 
   if np.atleast_3d(array).shape[2] != 1:
     raise Exception("Saving indexed PNGs requires 2D array.")
 
   im = Image.fromarray(array)
+  if resize_size is not None:
+      im = im.resize((resize_size[1], resize_size[0]), 0)
   im.putpalette(color_palette.ravel())
   im.save(filename, format='PNG')

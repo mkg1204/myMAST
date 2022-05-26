@@ -1,4 +1,3 @@
-# 对每个序列，返回所有图片和标注文件
 import os
 import json
 import cv2 as cv
@@ -10,13 +9,14 @@ from torch.utils import data
 from torchvision import transforms as transforms
 
 class YTB_Test(data.Dataset):
-    def __init__(self, root, anno_path='Annotations', meta_path='meta18.json'):
+    def __init__(self, root, anno_path='Annotations', meta_path='meta18.json', size=None):
         self.img_dir = os.path.join(root, 'valid', 'JPEGImages')
         self.anno_dir = os.path.join(root, 'valid', anno_path)
         meta_path = os.path.join(root, 'valid', meta_path)
         with open(meta_path) as f:
             self.meta_data = json.load(f)['videos']
         self.seq_list = list(self.meta_data.keys())
+        self.resize_size = size
 
     def __len__(self):
         return len(self.seq_list)
@@ -39,6 +39,15 @@ class YTB_Test(data.Dataset):
         for img_name in seq_imgs:
             img_path = os.path.join(seq_img_dir, img_name)
             img = cv.imread(img_path)
+            h, w, _ = img.shape
+            if self.resize_size is None:
+                new_h, new_w = h, w
+            else:
+                if w < self.resize_size:
+                    new_h, new_w = h, w
+                else:
+                    new_h, new_w = int(self.resize_size * h / w), self.resize_size        
+            img = cv.resize(img, (new_w, new_h), interpolation=cv.INTER_LINEAR)    
             img = np.float32(img) / 255.0
             img = cv.cvtColor(img, cv.COLOR_BGR2Lab)
             img = transforms.ToTensor()(img)
@@ -46,7 +55,9 @@ class YTB_Test(data.Dataset):
             imgs.append(img)
             if img_name.replace('.jpg', '.png') in seq_annos:
                 anno_path = os.path.join(seq_anno_dir, img_name.replace('.jpg', '.png'))
-                anno = np.expand_dims(np.atleast_3d(Image.open(anno_path))[..., 0], 0)
+                anno = np.atleast_3d(Image.open(anno_path))[..., 0]
+                anno = cv.resize(anno, (new_w, new_h), interpolation=cv.INTER_LINEAR)
+                anno = np.expand_dims(anno, 0)
                 obj_ids = np.sort(np.unique(anno))[1:]
                 new_obj = []
                 for obj_id in obj_ids:
@@ -60,5 +71,4 @@ class YTB_Test(data.Dataset):
                 annos.append(torch.zeros(1))
                 new_objs.append([])
 
-        return imgs, annos, new_objs, {"seq_name":seq_name, "seq_imgs":seq_imgs}
-            
+        return imgs, annos, new_objs, {"seq_name":seq_name, "seq_imgs":seq_imgs, "seq_size":(h, w)}

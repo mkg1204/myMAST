@@ -21,7 +21,7 @@ def main():
     for key, value in sorted(vars(args).items()):
         log.info(str(key) + ': ' + str(value))
     
-    DataLoader = YTB_Test(args.datapath, args.annopath, args.metapath)
+    DataLoader = YTB_Test(args.datapath, args.annopath, args.metapath, args.size)
     DataLoader = torch.utils.data.DataLoader(
         DataLoader,
         batch_size=1, shuffle=False,num_workers=0,drop_last=False
@@ -120,13 +120,13 @@ def test(dataloader, model, log):
                 out_img = anno_0[0][0, 0].cpu().numpy().astype(np.uint8)
 
                 out_img = np.pad(out_img, pad, 'edge').astype(np.uint8)
-                imwrite_indexed(output_file, out_img )
+                imwrite_indexed(output_file, out_img, resize_size=seq_info["seq_size"])
 
             print(seq_info['seq_imgs'][i+1])
             output_file = os.path.join(output_folder, seq_info['seq_imgs'][i+1][0].replace('.jpg', '.png'))
             out_img = output[0, 0].cpu().numpy().astype(np.uint8)
             out_img = np.pad(out_img, pad, 'edge').astype(np.uint8)
-            imwrite_indexed(output_file, out_img)
+            imwrite_indexed(output_file, out_img, resize_size=seq_info["seq_size"])
 
 
         log.info('[{}/{}] {}'.format( b_i, n_b, seq_info["seq_name"]))
@@ -144,6 +144,7 @@ if __name__ == '__main__':
     parser.add_argument('--metapath', type=str, default='meta18.json')
     parser.add_argument('--savepath', type=str, default='results/test')
     parser.add_argument('--resume', type=str, default=None, help='Checkpoint file to resume')
+    parser.add_argument('--size', type=int, default=None, help='Width to resize')
 
 
     args = parser.parse_args()
