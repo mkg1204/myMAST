@@ -26,7 +26,10 @@ def main():
         DataLoader,
         batch_size=1, shuffle=False,num_workers=0,drop_last=False
     )
-
+    seq_nums = len(DataLoader)
+    seq_each_group = seq_nums // args.groups
+    start_seq_id = seq_each_group * args.groupid
+    end_seq_id = start_seq_id + seq_each_group if args.groupid < args.groups-1 else seq_nums
     model = MAST(args)
 
     log.info('Number of model parameters: {}'.format(sum([p.data.nelement() for p in model.parameters()])))
@@ -46,21 +49,23 @@ def main():
 
     start_full_time = time.time()
 
-    test(DataLoader, model, log)
+    test(DataLoader, model, log, start=start_seq_id, end=end_seq_id)
 
     log.info('full testing time = {:.2f} Hours'.format((time.time() - start_full_time) / 3600))
 
 
-def test(dataloader, model, log):
+def test(dataloader, model, log, start=None, end=None):
     model.eval()
 
     torch.backends.cudnn.benchmark = True
 
     n_b = len(dataloader)
-
-    log.info("Start testing.")
+    start = 0 if start is None else start
+    end = len(dataloader) if end is None else end
+    log.info("Start testing, from {} to {}.".format(start, end))
     for b_i, (images_rgb, annotations, new_objs, seq_info) in enumerate(dataloader):
-
+        if b_i < start or b_i >= end:
+            continue
         images_rgb = [r.cuda() for r in images_rgb]
         annotations = [q.cuda() for q in annotations]
 
@@ -116,7 +121,7 @@ def test(dataloader, model, log):
             pad =  ((0,0), (0,0))
             if i == 0:
                 # output first mask
-                output_file = os.path.join(output_folder, '%s.png' % str(0).zfill(5))
+                output_file = os.path.join(output_folder, seq_info['seq_imgs'][0][0].replace('.jpg', '.png'))
                 out_img = anno_0[0][0, 0].cpu().numpy().astype(np.uint8)
 
                 out_img = np.pad(out_img, pad, 'edge').astype(np.uint8)
@@ -144,7 +149,8 @@ if __name__ == '__main__':
     parser.add_argument('--savepath', type=str, default='results/test')
     parser.add_argument('--resume', type=str, default=None, help='Checkpoint file to resume')
     parser.add_argument('--size', type=int, default=None, help='Width to resize')
-
+    parser.add_argument('--groups', type=int, default=1)
+    parser.add_argument('--groupid', type=int, default=0)
 
     args = parser.parse_args()
 
