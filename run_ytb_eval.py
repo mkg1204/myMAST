@@ -22,18 +22,23 @@ def main():
         log.info(str(key) + ': ' + str(value))
     
     DataLoader = YTB_Test(args.datapath, args.annopath, args.metapath, args.size)
-    DataLoader = torch.utils.data.DataLoader(
-        DataLoader,
-        batch_size=1, shuffle=False,num_workers=0,drop_last=False
-    )
     seq_nums = len(DataLoader)
     seq_each_group = seq_nums // args.groups
     start_seq_id = seq_each_group * args.groupid
     end_seq_id = start_seq_id + seq_each_group if args.groupid < args.groups-1 else seq_nums
+    DataLoader.seq_list = DataLoader.seq_list[start_seq_id:end_seq_id]
+    DataLoader = torch.utils.data.DataLoader(
+        DataLoader,
+        batch_size=1, shuffle=False,num_workers=0,drop_last=False
+    )
+    #seq_nums = len(DataLoader)
+    #seq_each_group = seq_nums // args.groups
+    #start_seq_id = seq_each_group * args.groupid
+    #end_seq_id = start_seq_id + seq_each_group if args.groupid < args.groups-1 else seq_nums
     model = MAST(args)
 
     log.info('Number of model parameters: {}'.format(sum([p.data.nelement() for p in model.parameters()])))
-    
+    log.info("start:{}, end:{}, all:{}".format(start_seq_id, end_seq_id, len(DataLoader)))
     if args.resume:
         if os.path.isfile(args.resume):
             log.info("=> loading checkpoint '{}'".format(args.resume))
@@ -49,23 +54,20 @@ def main():
 
     start_full_time = time.time()
 
-    test(DataLoader, model, log, start=start_seq_id, end=end_seq_id)
+    test(DataLoader, model, log)
 
     log.info('full testing time = {:.2f} Hours'.format((time.time() - start_full_time) / 3600))
 
 
-def test(dataloader, model, log, start=None, end=None):
+def test(dataloader, model, log):
     model.eval()
 
     torch.backends.cudnn.benchmark = True
 
     n_b = len(dataloader)
-    start = 0 if start is None else start
-    end = len(dataloader) if end is None else end
-    log.info("Start testing, from {} to {}.".format(start, end))
+
+    log.info("Start testing")
     for b_i, (images_rgb, annotations, new_objs, seq_info) in enumerate(dataloader):
-        if b_i < start or b_i >= end:
-            continue
         images_rgb = [r.cuda() for r in images_rgb]
         annotations = [q.cuda() for q in annotations]
 
